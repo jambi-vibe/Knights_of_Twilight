@@ -8,10 +8,11 @@ screen = pygame.display.set_mode((1000, 1000), pygame.SCALED)
 clock = pygame.time.Clock()
 running = True
 
-current_player_pos = character.draw_player()
-left_wall, right_wall, back_wall, small_left_wall, small_right_wall = world.starting_area()
-
 player_area = 1
+
+current_player_pos = character.draw_player()
+
+left_wall, right_wall, back_wall, small_left_wall, small_right_wall = world.starting_area()
 
 while running:
     old_x_pos = current_player_pos.x
@@ -63,14 +64,28 @@ while running:
 
     if current_player_pos.colliderect(small_right_wall):
             current_player_pos.y = old_y_pos
+
+    if current_player_pos.bottom <= 0:
+         player_area = player_area + 1
+         current_player_pos.x = 300
+         current_player_pos.y = 700
+        
+
     
     
     #Draws the walls on screen
-    pygame.draw.rect(screen, "white", left_wall)
-    pygame.draw.rect(screen, "white", right_wall)
-    pygame.draw.rect(screen, "white", back_wall)
-    pygame.draw.rect(screen, "white", small_right_wall)
-    pygame.draw.rect(screen, "white", small_left_wall)
+    if player_area == 1:
+        left_wall, right_wall, back_wall, small_left_wall, small_right_wall = world.starting_area()
+        walls = world.starting_area()
+        for wall in walls:
+            pygame.draw.rect(screen, "white", wall)
+
+    if player_area == 2:
+        left_wall, right_wall, back_wall, small_left_wall, small_right_wall = world.sword_area_locked()
+        walls = world.sword_area_locked()
+        for wall in walls:
+            pygame.draw.rect(screen, "white", wall)
+    
 
     pygame.display.flip()
                 
